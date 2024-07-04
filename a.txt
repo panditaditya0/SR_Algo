@@ -1,0 +1,4 @@
+PySide6==6.7.2
+numpy==2.0.0
+fyers-apiv3==3.1.1
+pandas==2.2.2
