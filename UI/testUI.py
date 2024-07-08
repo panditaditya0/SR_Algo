@@ -1,9 +1,15 @@
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QTextEdit, QPushButton
 from PySide6.QtCore import QSize, QThread, Signal, Slot
+import threading
+import time
+
+import CandleHistory
+import PivotPointStd
+import PlotCandleStick
 import SupportResistance
 from datetime import datetime
-
+import Strategy
 
 class Worker(QThread):
     update = Signal(dict)
@@ -16,7 +22,18 @@ class Worker(QThread):
     def run(self):
         support_value = self.support_input.text()
         resistance_value = self.resistance_input.text()
-        SupportResistance.supportAndResistance(float(support_value), float(resistance_value), self)
+        # SupportResistance.supportAndResistance(float(support_value), float(resistance_value), self)
+        # PivotPointStd.PivotPointTrade()
+        # t1 = threading.Thread(target= PivotPointStd.start_making_candles, args=((["MCX:CRUDEOILM24JULFUT"]),))
+        # t2 = threading.Thread(target= CandleHistory.start_updating_history_candles,args=((["MCX:CRUDEOILM24JULFUT"]),))
+        # t1.start()
+        # t2.start()
+        # while True:
+        #     df = CandleHistory.get_candle_history()
+        #     if df is not None:
+        #         print(df.iloc[[0, -1]])
+        #     time.sleep(1)
+        Strategy.start_strategy(self)
 
 
 def get_new_value(new_value, old_value):
@@ -138,6 +155,8 @@ class MainWindow(QWidget):
         self.worker = Worker(self.support_input, self.resistance_input)
         self.worker.update.connect(self.display_message)
         self.worker.start()
+        time.sleep(4)
+        # PlotCandleStick.show()
 
     @Slot(str)
     def display_message(self, message):

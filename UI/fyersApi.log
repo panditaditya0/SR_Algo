@@ -1,1 +1,0 @@
-{"level":"ERROR","location":"[post_call:85] fyersModel","message":{"API":"/orders/sync","Error":{"code":-50,"message":"limitPrice: Must be greater than or equal to 0.0025","s":"error"}},"timestamp":"2024-07-01 11:33:37,622+0530","service":"FyersAPI"}

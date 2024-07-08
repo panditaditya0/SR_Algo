@@ -36,6 +36,6 @@ def get_access_token2(auth_code,session):
     return access_token
 
 def get_cached_access_token():
-    with open("accessToken2.txt", "r") as f:
+    with open("/Users/administrator/PycharmProjects/SR_Algo/UI/accessToken2.txt", "r") as f:
         access_token = f.read()
     return access_token

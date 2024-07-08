@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit
 from PySide6.QtCore import QThread, Signal, Slot, QSize, QRect
 import SupportResistance
+import Strategy
 
 class Worker(QThread):
     update = Signal(dict)
@@ -14,8 +15,8 @@ class Worker(QThread):
     def run(self):
         support_value = self.support_input.text()
         resistance_value = self.resistance_input.text()
-        SupportResistance.supportAndResistance(float(support_value), float(resistance_value), self)
-
+        # SupportResistance.supportAndResistance(float(support_value), float(resistance_value), self)
+        Strategy.start_strategy(self)
 
 class MainApp(QWidget):
     def __init__(self):

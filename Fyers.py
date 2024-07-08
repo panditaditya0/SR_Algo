@@ -49,14 +49,12 @@ class Fyers:
     def start_web_socket(self):
         self.fyers.connect()
 
-    def candle_history(self):
-        today_date = date.today()
-        end_date = today_date - datetime.timedelta(days=2)
-        data = {"symbol": self.symbol,
-                "resolution": "5",
+    def candle_history(self, symbol, startDate, endDate):
+        data = {"symbol": symbol,
+                "resolution": "1",
                 "date_format": "1",
-                "range_from": end_date,
-                "range_to": today_date,
+                "range_from": startDate,
+                "range_to": endDate,
                 "cont_flag": "1"}
         history_data = self.fyersModel.history(data=data)
         cols = ["datetime", "open", "high", "low", "close", "volume"]
@@ -91,3 +89,20 @@ class Fyers:
         }
         response = self.fyersModel.place_order(data=data)
         print(response)
+
+    def previous_day_candle(self, symbol, startDate, endDate):
+        data = {"symbol": symbol,
+                "resolution": "D",
+                "date_format": "1",
+                "range_from": startDate[:10],
+                "range_to": endDate[:10],
+                "cont_flag": "1"}
+        history_data = self.fyersModel.history(data=data)
+        cols = ["datetime", "open", "high", "low", "close", "volume"]
+        df = pd.DataFrame.from_dict(history_data["candles"])
+        df.columns = cols
+        df["datetime"] = pd.to_datetime(df["datetime"], unit="s")
+        df["datetime"] = df["datetime"].dt.tz_localize('utc').dt.tz_convert('Asia/Kolkata')
+        df["datetime"] = df["datetime"].dt.tz_localize(None)
+        df['datetime'] = pd.to_datetime(df['datetime'], format="%Y-%m-%dT%H:%M:%S")
+        return df

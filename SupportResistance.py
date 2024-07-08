@@ -1,18 +1,17 @@
 import time
 from Fyers import Fyers
-import datetime
 
 def supportAndResistance(sup, res, self):
-    index_symbol = "NSE:NIFTYBANK-INDEX"
-    call_symbol = f"NSE:BANKNIFTY24710{(round(sup / 100) * 100) - 100}CE"
-    put_symbol = f"NSE:BANKNIFTY24710{(round(res / 100) * 100) + 100}PE"
-    # index_symbol = "MCX:CRUDEOILM24JULFUT"
-    # call_symbol ="MCX:CRUDEOILM24JULFUT"
-    # put_symbol = "MCX:CRUDEOILM24JULFUT"
+    # index_symbol = "NSE:NIFTYBANK-INDEX"
+    # call_symbol = f"NSE:BANKNIFTY24710{(round(sup / 100) * 100) - 100}CE"
+    # put_symbol = f"NSE:BANKNIFTY24710{(round(res / 100) * 100) + 100}PE"
+    index_symbol = "MCX:CRUDEOILM24JULFUT"
+    call_symbol ="MCX:CRUDEOILM24JULFUT"
+    put_symbol = "MCX:CRUDEOILM24JULFUT"
     qty = 45
     fyers = Fyers([index_symbol, call_symbol, put_symbol])
     fyers.start_web_socket()
-    time.sleep(10)
+    time.sleep(3)
     isTradeOn = False
     target = buyingPrice = stopLoss = lastTradedPrice = call_ltp = put_ltp = 0
     symbol_bought = ""
@@ -20,7 +19,7 @@ def supportAndResistance(sup, res, self):
     pnl = 0
     log = ""
     noOfTradesCompleted = 0
-    while noOfTradesCompleted <1:
+    while noOfTradesCompleted < 1:
         time.sleep(0.2)
         newLTP = fyers.getLtp()
         index_ltp = newLTP[index_symbol]
@@ -93,6 +92,8 @@ def supportAndResistance(sup, res, self):
                 symbol_bought = ''
                 # dataLabel.setText(f"s -> {sup} \n res -> {res} \n tradeOn -> {isTradeOn} \n  SOLD AT TARGET")
                 noOfTradesCompleted = noOfTradesCompleted+1
+
+    return pnl
 
 def get_stoploss_and_target(buyingPrice):
     stopLoss = (0.95 * buyingPrice)
